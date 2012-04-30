@@ -5,7 +5,20 @@
             [clojure.java.shell :refer [sh]]
             [clojure.pprint :refer [pprint]]))
 
-(defn gitify [project & args]
+(defn gitify
+  "Create a git(hub) repository for your project.
+
+This task will create a Github repository under your account
+with the same name as the project name, run `git init`, and set
+up the origin remote to point at the new Github repository. If
+you pass the --init key, it'll also run `git add .`, commit, and
+push. If you pass the --private option, it will try to make the
+repository private. Obviously, this only works if you actually
+have a Github plan allowing it.
+
+This task requires that you have set the github.user and
+github.password git config options."
+  [project & args]
   (let [user (trim-newline (:out (sh "git" "config" "--get" "github.user")))
         pass (trim-newline (:out (sh "git" "config" "--get" "github.password")))
         name (:name project)
